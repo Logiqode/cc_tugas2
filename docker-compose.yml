@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: currency_db
+      MYSQL_ROOT_PASSWORD: secretpassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - my-network
+
+  web:
+    build: ./app
+    ports:
+      - "8008:8008"
+    depends_on:
+      - db
+    networks:
+      - my-network
+
+volumes:
+  db_data:
+
+networks:
+  my-network:
+    driver: bridge

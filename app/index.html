@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Docker Currency Converter</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; margin-top: 50px; background-color: #f4f4f9; }
+        .converter { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        input { padding: 10px; font-size: 18px; width: 200px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 20px; font-size: 18px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #2980b9; }
+        #result { font-size: 24px; font-weight: bold; margin-top: 20px; color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+<div class="converter">
+    <h2>USD to IDR Converter</h2>
+    <input type="number" id="amount" placeholder="Enter USD amount">
+    <br>
+    <button onclick="convert()">Convert & Save</button>
+    <div id="result"></div>
+    <p style="font-size: 12px; color: #666; margin-top: 30px;">History is saved to MySQL Database</p>
+</div>
+
+<script>
+    function convert() {
+        let amount = document.getElementById('amount').value;
+        if (amount === "") return;
+
+        let rate = 16000; 
+        let result = amount * rate;
+
+        document.getElementById('result').innerText = "Rp " + result.toLocaleString();
+
+        fetch('/save', {
+            method: 'POST',
+            body: JSON.stringify({ amount: amount, result: result })
+        }).then(response => console.log("Saved to Database!"));
+    }
+</script>
+
+</body>
+</html>
